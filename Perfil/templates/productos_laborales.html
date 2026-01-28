@@ -4,7 +4,7 @@
 <h2 class="text-3xl font-semibold text-slate-800 mb-8">Productos Laborales</h2>
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-    {% for proy in datos %}
+    {% for proy in datos|dictsortreversed:"fechaproducto" %}
     <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 border-l-[12px] border-[#D1B3D1] flex flex-col h-full transition-all hover:shadow-md">
         <div class="mb-4">
             <h3 class="text-lg font-semibold text-slate-800 leading-snug">{{ proy.nombreproducto }}</h3>
