@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<span class="inline-block bg-[#F3F0F7] text-[#8A7A9A] px-3 py-1 rounded-full text-[10px] font-medium uppercase tracking-widest mb-4">Investigación</span>
+<h2 class="text-3xl font-semibold text-slate-800 mb-8">Productos Académicos</h2>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    {% for proy in datos %}
+    <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 border-l-[12px] border-[#D1B3D1] flex flex-col h-full transition-all duration-300 hover:shadow-md">
+        <div class="mb-4">
+            <h3 class="text-lg font-semibold text-slate-800">{{ proy.nombrerecurso }}</h3>
+            <span class="text-[10px] font-bold text-[#A689A6] uppercase">{{ proy.clasificador }}</span>
+        </div>
+        <div class="bg-slate-50/50 p-5 rounded-2xl flex-grow">
+            <p class="text-xs text-slate-600 leading-relaxed">{{ proy.descripcion }}</p>
+        </div>
+        </div>
+    {% empty %}
+    <div class="col-span-full text-center py-20 bg-white rounded-3xl border border-dashed border-slate-200">
+        <p class="text-slate-400 italic">No hay productos académicos registrados actualmente.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

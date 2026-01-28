@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<span class="inline-block bg-[#F3F0F7] text-[#8A7A9A] px-3 py-1 rounded-full text-[10px] font-medium uppercase tracking-widest mb-4">Logros</span>
+<h2 class="text-3xl font-semibold text-slate-800 mb-8">Reconocimientos</h2>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    {% for rec in datos %}
+    <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 border-l-[12px] border-[#D1B3D1] transition-all duration-300 hover:-translate-y-1 hover:shadow-md flex flex-col h-full">
+        
+        <div class="flex justify-between items-start mb-6">
+            <div class="flex-1 pr-4">
+                <h3 class="text-lg font-semibold text-slate-800">{{ rec.tiporeconocimiento }}</h3>
+                <p class="text-[#A689A6] font-medium text-xs uppercase">{{ rec.entidadpatrocinadora }}</p>
+            </div>
+            <span class="text-[10px] font-medium text-slate-400 bg-slate-50 px-2 py-1 rounded uppercase flex-shrink-0">
+                {{ rec.fechareconocimiento|date:"d/m/Y" }}
+            </span>
+        </div>
+
+        <div class="bg-slate-50/50 p-5 rounded-2xl mb-6 border border-slate-50 flex-grow">
+            <p class="text-xs text-slate-600 leading-relaxed">{{ rec.descripcionreconocimiento|linebreaksbr }}</p>
+        </div>
+
+        {% if rec.rutacertificado %}
+        <a href="{{ rec.rutacertificado.url }}" target="_blank" class="w-full text-center block py-3 border border-slate-200 text-slate-500 text-[10px] font-semibold uppercase rounded-xl hover:bg-slate-800 hover:text-white hover:border-slate-800 transition-all">
+            <i class="fa-solid fa-medal mr-2"></i> Ver Documento de Respaldo
+        </a>
+        {% endif %}
+
+        <span class="text-[8px] text-slate-300 mt-4 text-right">Ref: #{{ rec.idreconocimiento }}</span>
+    </div>
+    {% empty %}
+    <div class="col-span-full text-center p-20 bg-white rounded-3xl border-2 border-dashed border-slate-100">
+        <p class="text-slate-400 text-sm italic">Aún no se han registrado logros o reconocimientos.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

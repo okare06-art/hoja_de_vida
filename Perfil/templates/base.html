@@ -1,0 +1,182 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hoja de Vida - {% if perfil %}{{ perfil.nombres }}{% else %}Portafolio{% endif %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        body { background-color: #F8FAFC; margin: 0; overflow: hidden; }
+        .sidebar { background-color: #D1B3D1; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .nav-link { 
+            display: flex; align-items: center; gap: 12px; padding: 10px 15px;
+            color: #4A4A4A; transition: all 0.3s; border-radius: 12px; 
+            text-decoration: none; font-size: 12px; white-space: nowrap;
+        }
+        .nav-link:hover { background: rgba(255,255,255,0.4); }
+        /* El ID activo se puede manejar con lógica de Django en cada link si lo deseas */
+        
+        .admin-btn {
+            margin-top: auto;
+            background-color: #2D3748;
+            color: white !important;
+            font-weight: bold;
+            text-align: center;
+            justify-content: center;
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 11px;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        #modalSecciones { backdrop-filter: blur(4px); }
+    </style>
+</head>
+<body class="no-scrollbar">
+
+    <div class="flex h-screen w-screen overflow-hidden">
+        
+        <aside class="w-20 hover:w-72 group sidebar h-full flex flex-col items-center py-6 px-4 shadow-xl transition-all duration-300 z-50 no-scrollbar overflow-y-auto flex-shrink-0">
+            
+            <div class="mb-4 mt-4 transition-all duration-300">
+                <div class="w-12 group-hover:w-28 h-12 group-hover:h-28 rounded-[20px] group-hover:rounded-[25px] overflow-hidden bg-white shadow-md border-4 border-white flex items-center justify-center transition-all duration-300">
+                    {% if perfil and perfil.fotoperfil %}
+                        <img src="{{ perfil.fotoperfil.url }}" alt="Foto" class="w-full h-full object-cover">
+                    {% else %}
+                        <i class="fa-solid fa-user text-2xl group-hover:text-4xl text-slate-300"></i>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="text-center mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 h-0 group-hover:h-auto overflow-hidden"> 
+                <h2 class="text-lg font-bold text-[#2D3748] leading-tight whitespace-nowrap">
+                    {% if perfil %}{{ perfil.nombres }} {{ perfil.apellidos }}{% else %}Usuario{% endif %}
+                </h2>
+                <p class="text-[9px] text-[#718096] font-bold uppercase tracking-widest mt-1">Hoja de Vida Digital</p>
+            </div>
+
+            <nav class="w-full space-y-1 flex-1 no-scrollbar">
+                <a href="{% url 'home' %}" class="nav-link">
+                    <i class="fa-solid fa-house min-w-[20px] text-center text-xl group-hover:text-base"></i>
+                    <span class="font-bold uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-300">Inicio</span>
+                </a>
+                
+                <a href="{% url 'experiencia' %}" class="nav-link">
+                    <i class="fa-solid fa-briefcase min-w-[20px] text-center text-xl group-hover:text-base"></i>
+                    <span class="font-bold uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-300">Experiencia Laboral</span>
+                </a>
+
+                <a href="{% url 'productos_laborales' %}" class="nav-link">
+                    <i class="fa-solid fa-tools min-w-[20px] text-center text-xl group-hover:text-base"></i>
+                    <span class="font-bold uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-300">Producción Laboral</span>
+                </a>
+                
+                <a href="{% url 'reconocimientos' %}" class="nav-link">
+                    <i class="fa-solid fa-award min-w-[20px] text-center text-xl group-hover:text-base"></i>
+                    <span class="font-bold uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-300">Reconocimientos</span>
+                </a>
+
+                <a href="{% url 'productos_academicos' %}" class="nav-link">
+                    <i class="fa-solid fa-graduation-cap min-w-[20px] text-center text-xl group-hover:text-base"></i>
+                    <span class="font-bold uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-300">Académico</span>
+                </a>
+
+                <a href="{% url 'cursos' %}" class="nav-link">
+                    <i class="fa-solid fa-certificate min-w-[20px] text-center text-xl group-hover:text-base"></i>
+                    <span class="font-bold uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-300">Cursos</span>
+                </a>
+
+                <a href="{% url 'garage' %}" class="nav-link">
+                    <i class="fa-solid fa-cart-shopping min-w-[20px] text-center text-xl group-hover:text-base"></i>
+                    <span class="font-bold uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-300">Garage</span>
+                </a>
+
+                <button type="button" onclick="abrirModal()" class="nav-link w-full text-left" style="background-color: #4A3B4A; color: white; margin-top: 20px;">
+                    <i class="fa-solid fa-file-pdf min-w-[20px] text-center text-xl group-hover:text-base"></i>
+                    <span class="font-bold uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-300">Exportar CV</span>
+                </button>
+
+                <div class="pt-6">
+                    <a href="/admin" class="nav-link admin-btn">
+                        <i class="fa-solid fa-lock min-w-[20px] text-xl group-hover:text-base"></i>
+                        <span class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 ml-2">ADMIN PANEL</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="flex-1 h-full p-10 overflow-y-auto no-scrollbar bg-[#F8FAFC]">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <div id="modalSecciones" class="fixed inset-0 bg-black bg-opacity-50 z-[100] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+            <div class="p-6">
+                <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-list-check text-[#D1B3D1]"></i> 
+                    Personalizar CV (PDF)
+                </h3>
+                <div class="space-y-3" id="checks-impresion">
+                    <label class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                        <input type="checkbox" id="check-exp" checked class="w-4 h-4 accent-[#D1B3D1]">
+                        <span class="text-sm font-medium text-gray-700">Incluir Experiencia</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                        <input type="checkbox" id="check-cursos" checked class="w-4 h-4 accent-[#D1B3D1]">
+                        <span class="text-sm font-medium text-gray-700">Incluir Cursos</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                        <input type="checkbox" id="check-logros" checked class="w-4 h-4 accent-[#D1B3D1]">
+                        <span class="text-sm font-medium text-gray-700">Incluir Reconocimientos</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                        <input type="checkbox" id="check-proy" checked class="w-4 h-4 accent-[#D1B3D1]">
+                        <span class="text-sm font-medium text-gray-700">Incluir Proyectos</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
+                        <input type="checkbox" id="check-garage" class="w-4 h-4 accent-[#D1B3D1]">
+                        <span class="text-sm font-medium text-gray-700 text-amber-600">Documentos Garage</span>
+                    </label>
+                </div>
+            </div>
+            <div class="bg-gray-50 p-4 flex gap-3">
+                <button onclick="cerrarModal()" class="flex-1 px-4 py-2 text-sm font-bold text-gray-500 hover:bg-gray-100 rounded-xl">CANCELAR</button>
+                <button onclick="generarCV()" class="flex-1 px-4 py-2 text-sm font-bold text-white bg-[#4A3B4A] hover:bg-[#3D2F3D] rounded-xl">GENERAR</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('modalSecciones');
+        function abrirModal() { modal.classList.remove('hidden'); }
+        function cerrarModal() { modal.classList.add('hidden'); }
+
+        function generarCV() {
+            // Obtenemos los valores de los checks para que coincidan con los request.GET.get de tu vista pdf_datos_personales
+            const exp = document.getElementById('check-exp').checked;
+            const cursos = document.getElementById('check-cursos').checked;
+            const logros = document.getElementById('check-logros').checked;
+            const proy = document.getElementById('check-proy').checked;
+            const garage = document.getElementById('check-garage').checked;
+            
+            // Nombre de la URL en tu urls.py es 'exportar_cv'
+            const urlBase = "{% url 'exportar_cv' %}";
+            const params = `?exp=${exp}&cursos=${cursos}&logros=${logros}&proy=${proy}&garage=${garage}`;
+            
+            window.open(urlBase + params, '_blank');
+            cerrarModal();
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) cerrarModal();
+        }
+    </script>
+</body>
+</html>

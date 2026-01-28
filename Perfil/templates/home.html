@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block content %}
+<span class="inline-block bg-[#F3F0F7] text-[#8A7A9A] px-3 py-1 rounded-full text-[10px] font-medium uppercase tracking-widest mb-4">Ficha Personal</span>
+<h2 class="text-3xl font-semibold text-slate-800 mb-8">Datos Personales</h2>
+
+<div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 border-l-[12px] border-[#D1B3D1]">
+    <div class="flex flex-col md:flex-row gap-8 mb-10 pb-6 border-b border-slate-50">
+        {% if perfil.fotoperfil %}
+        <img src="{{ perfil.fotoperfil.url }}" class="w-32 h-32 rounded-2xl object-cover border border-slate-100 shadow-sm">
+        {% else %}
+        <div class="w-32 h-32 rounded-2xl bg-slate-100 flex items-center justify-center border border-slate-100">
+            <i class="fa-solid fa-user text-4xl text-slate-300"></i>
+        </div>
+        {% endif %}
+        <div class="flex-1">
+            <p class="text-[10px] font-semibold text-[#D1B3D1] uppercase mb-2">Descripción del Perfil</p>
+            <p class="text-base text-slate-600 leading-relaxed italic">"{{ perfil.descripcionperfil }}"</p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div class="space-y-6">
+            <div>
+                <p class="text-[10px] font-semibold text-slate-400 uppercase">Nombre Completo</p>
+                <p class="text-sm font-medium text-slate-700">{{ perfil.nombres }} {{ perfil.apellidos }}</p>
+            </div>
+            <div>
+                <p class="text-[10px] font-semibold text-slate-400 uppercase">Cédula</p>
+                <p class="text-sm font-medium text-slate-700">{{ perfil.numerocedula }}</p>
+            </div>
+            <div>
+                <p class="text-[10px] font-semibold text-slate-400 uppercase">Nacionalidad</p>
+                <p class="text-sm font-medium text-slate-700">{{ perfil.nacionalidad }}</p>
+            </div>
+            <div>
+                <p class="text-[10px] font-semibold text-slate-400 uppercase">Género</p>
+                <p class="text-sm font-medium text-slate-700">{{ perfil.get_sexo_display }}</p>
+            </div>
+        </div>
+
+        <div class="space-y-6">
+            <div>
+                <p class="text-[10px] font-semibold text-slate-400 uppercase">Nacimiento</p>
+                <p class="text-sm font-medium text-slate-700">{{ perfil.fechanacimiento|date:"d/m/Y" }} ({{ perfil.lugarnacimiento }})</p>
+            </div>
+            <div>
+                <p class="text-[10px] font-semibold text-slate-400 uppercase">Estado Civil</p>
+                <p class="text-sm font-medium text-slate-700">{{ perfil.estadocivil }}</p>
+            </div>
+            <div>
+                <p class="text-[10px] font-semibold text-slate-400 uppercase">Licencia</p>
+                <p class="text-sm font-medium text-slate-700">{{ perfil.licenciaconducir|default:"No aplica" }}</p>
+            </div>
+            <div>
+                <p class="text-[10px] font-semibold text-slate-400 uppercase">Sitio Web</p>
+                <p class="text-sm font-medium text-slate-700">
+                    {% if perfil.sitioweb %}<a href="{{ perfil.sitioweb }}" target="_blank" class="text-blue-500 hover:underline">Ver enlace</a>{% else %}-{% endif %}
+                </p>
+            </div>
+        </div>
+
+        <div class="space-y-6">
+            <div>
+                <p class="text-[10px] font-semibold text-slate-400 uppercase">Teléfonos</p>
+                <p class="text-sm font-medium text-slate-700">
+                    {{ perfil.telefonofijo|default:"" }} {% if perfil.telefonofijo and perfil.telefonoconvencional %}/{% endif %} {{ perfil.telefonoconvencional|default:"" }}
+                </p>
+            </div>
+            <div>
+                <p class="text-[10px] font-semibold text-slate-400 uppercase">Dirección Domicilio</p>
+                <p class="text-sm font-medium text-slate-700">{{ perfil.direcciondomiciliaria }}</p>
+            </div>
+            <div>
+                <p class="text-[10px] font-semibold text-slate-400 uppercase">Dirección Trabajo</p>
+                <p class="text-sm font-medium text-slate-700">{{ perfil.direcciontrabajo|default:"-" }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

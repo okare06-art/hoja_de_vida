@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+<span class="inline-block bg-[#F3F0F7] text-[#8A7A9A] px-3 py-1 rounded-full text-[10px] font-medium uppercase tracking-widest mb-4">Trayectoria</span>
+<h2 class="text-3xl font-semibold text-slate-800 mb-8">Experiencia Laboral</h2>
+
+<div class="space-y-8">
+    {% for exp in datos %}
+    <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 border-l-[12px] border-[#D1B3D1] transition-all duration-300 hover:shadow-md">
+        <div class="flex flex-col md:flex-row justify-between mb-6">
+            <div>
+                <h3 class="text-xl font-semibold text-slate-800">{{ exp.cargodesempenado }}</h3>
+                <p class="text-[#A689A6] font-medium text-sm">
+                    {{ exp.nombrempresa }} — {{ exp.lugarempresa }}
+                    {% if exp.sitiowebempresa %}
+                    <a href="{{ exp.sitiowebempresa }}" target="_blank" class="text-blue-400 ml-2"><i class="fa-solid fa-link text-[10px]"></i></a>
+                    {% endif %}
+                </p>
+            </div>
+            <p class="text-[11px] font-medium text-slate-400 uppercase mt-2 md:mt-0">
+                {{ exp.fechainiciogestion|date:"d/m/Y" }} — {% if exp.fechafingestion %}{{ exp.fechafingestion|date:"d/m/Y" }}{% else %}Presente{% endif %}
+            </p>
+        </div>
+
+        <div class="bg-slate-50/50 p-6 rounded-2xl mb-8 border border-slate-50">
+            <p class="text-[10px] font-semibold text-slate-400 uppercase mb-2">Funciones y Responsabilidades</p>
+            <p class="text-sm text-slate-600 leading-relaxed">{{ exp.descripcionfunciones|linebreaksbr }}</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-slate-50">
+            <div>
+                <p class="text-[10px] font-semibold text-slate-400 uppercase">Contacto</p>
+                <p class="text-sm font-medium text-slate-700">{{ exp.nombrecontactoempresarial }}</p>
+            </div>
+            <div>
+                <p class="text-[10px] font-semibold text-slate-400 uppercase">Teléfono</p>
+                <p class="text-sm font-medium text-slate-700">{{ exp.telefonocontactoempresarial }}</p>
+            </div>
+            <div>
+                <p class="text-[10px] font-semibold text-slate-400 uppercase">Email Corporativo</p>
+                <p class="text-sm font-medium text-slate-700">{{ exp.emailempresa }}</p>
+            </div>
+        </div>
+
+        {% if exp.rutacertificado %}
+        <div class="mt-6">
+            <a href="{{ exp.rutacertificado.url }}" target="_blank" class="inline-block bg-slate-800 text-white px-5 py-2 rounded-xl text-[10px] font-semibold uppercase hover:bg-slate-700 transition-colors">
+                <i class="fa-solid fa-file-pdf mr-2"></i>Ver Certificado Laboral
+            </a>
+        </div>
+        {% endif %}
+    </div>
+    {% empty %}
+    <div class="text-center py-20 bg-white rounded-3xl border border-dashed border-slate-200">
+        <p class="text-slate-400 italic">No se ha registrado experiencia laboral aún.</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
